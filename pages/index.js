@@ -2,11 +2,9 @@ import Head from "next/head";
 import React, { useEffect, useState } from 'react';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Output from "@/components/Output";
-import Input from "@/components/Input";
-import LoginForm from "@/components/LoginForm";
 import { useAuth } from "@/contexts/auth"
 import useResource from "@/hooks/useResource";
+import Main from "@/components/Main";
 
 export default function Home() {
   const { user, login, token } = useAuth() // destructuring 
@@ -19,18 +17,19 @@ export default function Home() {
    login(username, password)
     
   }
-  const addCookieStand = (event) => {
+  const submitHandler = (event) => {
     event.preventDefault();
-    // Create a new cookie stand object
-    const newCookieStand = {
-      id: response.length + 1, // Generate a unique ID
+
+    const newCookie = {
+      id: response.length + 1,
       location: event.target.location.value,
       minimum_customers_per_hour: parseInt(event.target.minCustomersPerHour.value),
       maximum_customers_per_hour: parseInt(event.target.maxCustomersPerHour.value),
       average_cookies_per_sale: parseFloat(event.target.avgCookiesPerSale.value),
     };
-    console.log(newCookieStand,5555555555555555555555555);
-    createResource( newCookieStand)
+    
+    createResource(newCookie)
+    
     event.target.reset();
   };
   return (
@@ -40,16 +39,7 @@ export default function Home() {
       </Head>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex flex-col items-center flex-grow py-4 space-y-8">
-          {!user ? (
-            <LoginForm loginformhundeler={loginformhundeler} />
-          ) : (
-            <>
-              <Input handeler={addCookieStand} />
-              <Output cookieStands={response}  deletData={deleteResource}/>
-            </>
-          )}
-        </main>
+        <Main user={user} loginformhundeler={loginformhundeler} handeler={submitHandler} cookie={response}  deletData={deleteResource}/>
       </div>
       <Footer cookieStands={response} />
 
